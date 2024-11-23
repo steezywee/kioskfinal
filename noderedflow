@@ -908,6 +908,16 @@
         ]
     },
     {
+        "id": "ed8485805da508ec",
+        "type": "comment",
+        "z": "88a31a254352bbd2",
+        "name": "CHANGE IP's",
+        "info": "Change ALL my IP's!!!",
+        "x": 970,
+        "y": 320,
+        "wires": []
+    },
+    {
         "id": "b86c8199e7884462",
         "type": "modbus-read",
         "z": "27355a4f25c0c00c",
@@ -1473,7 +1483,7 @@
         "type": "debug",
         "z": "7915794ca88cb27a",
         "name": "Kiosk_1 Debug",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1601,7 +1611,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 940,
-        "y": 400,
+        "y": 420,
         "wires": []
     },
     {
@@ -1700,7 +1710,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 940,
-        "y": 620,
+        "y": 640,
         "wires": []
     },
     {
@@ -1875,5 +1885,15 @@
                 "6a2317bc6470b369"
             ]
         ]
+    },
+    {
+        "id": "0c8914dbe7c5bc8d",
+        "type": "comment",
+        "z": "7915794ca88cb27a",
+        "name": "CHANGE IP's",
+        "info": "Change ALL my IP's!!!",
+        "x": 930,
+        "y": 300,
+        "wires": []
     }
 ]
