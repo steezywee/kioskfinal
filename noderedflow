@@ -213,8 +213,8 @@
         "z": "521299218eaf712f",
         "name": "ProfileID's",
         "info": "lane1.wpr profileID: 16765\nlane2.wpr profileID: 16766",
-        "x": 540,
-        "y": 420,
+        "x": 520,
+        "y": 380,
         "wires": []
     },
     {
@@ -252,29 +252,6 @@
                 "7b36e7b398a439a7",
                 "eb3c5fe6b56dbb07"
             ]
-        ]
-    },
-    {
-        "id": "a2840cb5844a06e1",
-        "type": "switch",
-        "z": "521299218eaf712f",
-        "name": "",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 510,
-        "y": 520,
-        "wires": [
-            []
         ]
     },
     {
