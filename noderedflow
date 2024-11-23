@@ -1,0 +1,1879 @@
+[
+    {
+        "id": "521299218eaf712f",
+        "type": "tab",
+        "label": "Kiosk",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "909c32373110b97b",
+        "type": "tab",
+        "label": "SR-201 Working Area",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "88a31a254352bbd2",
+        "type": "tab",
+        "label": "SR-201 Final",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "27355a4f25c0c00c",
+        "type": "tab",
+        "label": "Waveshare Working Area",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7915794ca88cb27a",
+        "type": "tab",
+        "label": "Waveshare Final",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "1898400070f3d1ed",
+        "type": "config-log",
+        "logname": "Kiosk HTTP Log",
+        "logdir": "/var/log/nodered/",
+        "stamp": "local",
+        "logstyle": "plain",
+        "logrotate": true,
+        "logcompress": true,
+        "logrotatecount": "500",
+        "logsize": "5000",
+        "logtopic": false,
+        "logsource": true
+    },
+    {
+        "id": "7dbd7bc318a4fc50",
+        "type": "modbus-client",
+        "name": "",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "queueLogEnabled": false,
+        "failureLogEnabled": true,
+        "tcpHost": "192.168.1.200",
+        "tcpPort": "4196",
+        "tcpType": "TELNET",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "serialAsciiResponseStartDelimiter": "0x3A",
+        "unit_id": "1",
+        "commandDelay": "1",
+        "clientTimeout": "1000",
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": "2000",
+        "parallelUnitIdsAllowed": true,
+        "showErrors": false,
+        "showWarnings": true,
+        "showLogs": true
+    },
+    {
+        "id": "http-in",
+        "type": "http in",
+        "z": "521299218eaf712f",
+        "name": "Cloudflare",
+        "url": "/webhook",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 320,
+        "y": 220,
+        "wires": [
+            [
+                "response-function",
+                "7b36e7b398a439a7",
+                "28b12be33a9dab4a",
+                "f6e16f65da9ac575"
+            ]
+        ]
+    },
+    {
+        "id": "response-function",
+        "type": "function",
+        "z": "521299218eaf712f",
+        "name": "Send Response",
+        "func": "msg.payload = { status: \"ok\", message: \"POST received\" };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 540,
+        "y": 220,
+        "wires": [
+            [
+                "http-response",
+                "7b36e7b398a439a7",
+                "aefb57f770f7202a"
+            ]
+        ]
+    },
+    {
+        "id": "http-response",
+        "type": "http response",
+        "z": "521299218eaf712f",
+        "name": "Response to Cloudflare",
+        "statusCode": "",
+        "headers": {},
+        "x": 870,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "7b36e7b398a439a7",
+        "type": "debug",
+        "z": "521299218eaf712f",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "e1d2176baa6d472b",
+        "type": "flogger",
+        "z": "521299218eaf712f",
+        "name": "Log",
+        "logfile": "kiosk_http_log",
+        "inputchoice": "object",
+        "inputobject": "payload",
+        "inputobjectType": "msg",
+        "inputmoustache": "Recieved payload {{payload}} and topic {{topic}}",
+        "loglevel": "",
+        "logconfig": "1898400070f3d1ed",
+        "sendpane": true,
+        "x": 810,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "28b12be33a9dab4a",
+        "type": "function",
+        "z": "521299218eaf712f",
+        "name": "Append for Log - Post",
+        "func": "msg.payload = \"Post from Cloudflare: \" + JSON.stringify(msg.payload);\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 320,
+        "wires": [
+            [
+                "e1d2176baa6d472b"
+            ]
+        ]
+    },
+    {
+        "id": "aefb57f770f7202a",
+        "type": "function",
+        "z": "521299218eaf712f",
+        "name": "Append for Log - Response",
+        "func": "msg.payload = \"Response to Cloudflare: \" + JSON.stringify(msg.payload);\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 280,
+        "wires": [
+            [
+                "e1d2176baa6d472b"
+            ]
+        ]
+    },
+    {
+        "id": "d848c97054512f54",
+        "type": "comment",
+        "z": "521299218eaf712f",
+        "name": "ProfileID's",
+        "info": "lane1.wpr profileID: 16765\nlane2.wpr profileID: 16766",
+        "x": 540,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "eb3c5fe6b56dbb07",
+        "type": "link out",
+        "z": "521299218eaf712f",
+        "name": "Kiosk Link",
+        "mode": "link",
+        "links": [
+            "fe92608b561ce1c3",
+            "946e9fe7421650f0",
+            "d64a54cc86c311fd",
+            "433fe80c4d17ae70"
+        ],
+        "x": 785,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "f6e16f65da9ac575",
+        "type": "function",
+        "z": "521299218eaf712f",
+        "name": "Parse Cloudflare",
+        "func": "// Input JSON\nlet payload = msg.payload;\n\n// Initialize the message payload to send\nif (payload.profileId === \"16765\" || payload.profileId === \"16766\") {\n    // Determine kiosk name based on profileId\n    let kioskName = payload.profileId === \"16765\" ? \"Kiosk_1\" : \"Kiosk_2\";\n\n    // Set the specific payload based on success status\n    if (payload.success) {\n        msg.payload = `${kioskName} True`; // Success\n    } else {\n        msg.payload = `${kioskName} False`; // Failure\n    }\n\n    // Send the updated message\n    return msg;\n} else {\n    // Ignore unrelated profileId\n    return null;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 180,
+        "wires": [
+            [
+                "7b36e7b398a439a7",
+                "eb3c5fe6b56dbb07"
+            ]
+        ]
+    },
+    {
+        "id": "a2840cb5844a06e1",
+        "type": "switch",
+        "z": "521299218eaf712f",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 510,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fdd27e0e8c6f4734",
+        "type": "tcp request",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_1 Dev Board",
+        "server": "192.168.1.100",
+        "port": "6722",
+        "out": "time",
+        "ret": "string",
+        "splitc": "0",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 810,
+        "y": 240,
+        "wires": [
+            [
+                "a211071192d60e2c"
+            ]
+        ]
+    },
+    {
+        "id": "45f858f80f72bf48",
+        "type": "inject",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_1 Relay 1 Blink 1 Sec",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "11:1",
+        "payloadType": "str",
+        "x": 320,
+        "y": 120,
+        "wires": [
+            [
+                "fdd27e0e8c6f4734",
+                "88ddc26c6fa011a9"
+            ]
+        ]
+    },
+    {
+        "id": "88ddc26c6fa011a9",
+        "type": "delay",
+        "z": "909c32373110b97b",
+        "name": "Blink",
+        "pauseType": "delay",
+        "timeout": "2000",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 590,
+        "y": 240,
+        "wires": [
+            [
+                "fdd27e0e8c6f4734"
+            ]
+        ]
+    },
+    {
+        "id": "5eb0f2c78016008a",
+        "type": "inject",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_1 Relay 2 Blink 1 Sec",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "12:1",
+        "payloadType": "str",
+        "x": 320,
+        "y": 160,
+        "wires": [
+            [
+                "fdd27e0e8c6f4734",
+                "88ddc26c6fa011a9"
+            ]
+        ]
+    },
+    {
+        "id": "9062bbffd148dff7",
+        "type": "inject",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_1 Status",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "00",
+        "payloadType": "str",
+        "x": 360,
+        "y": 80,
+        "wires": [
+            [
+                "fdd27e0e8c6f4734"
+            ]
+        ]
+    },
+    {
+        "id": "a211071192d60e2c",
+        "type": "debug",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_1 Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "5a66de1bab61d6bf",
+        "type": "tcp request",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_2 Dev Board",
+        "server": "192.168.1.100",
+        "port": "6722",
+        "out": "time",
+        "ret": "string",
+        "splitc": "0",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 810,
+        "y": 460,
+        "wires": [
+            [
+                "56216e0d56372a2e"
+            ]
+        ]
+    },
+    {
+        "id": "edd75d5630a60d43",
+        "type": "inject",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_2 Relay 1 Blink 1 Sec",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "11:1",
+        "payloadType": "str",
+        "x": 320,
+        "y": 380,
+        "wires": [
+            [
+                "5a66de1bab61d6bf",
+                "49255defe32ad55d"
+            ]
+        ]
+    },
+    {
+        "id": "49255defe32ad55d",
+        "type": "delay",
+        "z": "909c32373110b97b",
+        "name": "Blink",
+        "pauseType": "delay",
+        "timeout": "2000",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 590,
+        "y": 520,
+        "wires": [
+            [
+                "5a66de1bab61d6bf"
+            ]
+        ]
+    },
+    {
+        "id": "fd502e6bfc4d480e",
+        "type": "inject",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_2 Relay 2 Blink 1 Sec",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "12:1",
+        "payloadType": "str",
+        "x": 320,
+        "y": 420,
+        "wires": [
+            [
+                "5a66de1bab61d6bf",
+                "49255defe32ad55d"
+            ]
+        ]
+    },
+    {
+        "id": "23d79b44ec553692",
+        "type": "inject",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_2 Status",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "00",
+        "payloadType": "str",
+        "x": 360,
+        "y": 340,
+        "wires": [
+            [
+                "5a66de1bab61d6bf"
+            ]
+        ]
+    },
+    {
+        "id": "56216e0d56372a2e",
+        "type": "debug",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_2 Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "c91c8598c92e4737",
+        "type": "tcp request",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_Spare Dev Board",
+        "server": "192.168.1.100",
+        "port": "6722",
+        "out": "time",
+        "ret": "string",
+        "splitc": "0",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 850,
+        "y": 720,
+        "wires": [
+            [
+                "f1b8b2e8bb131e59"
+            ]
+        ]
+    },
+    {
+        "id": "10b2c71767fb4bbf",
+        "type": "inject",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_Spare Relay Blink 1 Sec",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "11:1",
+        "payloadType": "str",
+        "x": 310,
+        "y": 640,
+        "wires": [
+            [
+                "c91c8598c92e4737",
+                "982b68752d415296"
+            ]
+        ]
+    },
+    {
+        "id": "982b68752d415296",
+        "type": "delay",
+        "z": "909c32373110b97b",
+        "name": "Blink",
+        "pauseType": "delay",
+        "timeout": "2000",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 590,
+        "y": 780,
+        "wires": [
+            [
+                "c91c8598c92e4737"
+            ]
+        ]
+    },
+    {
+        "id": "9428c0e0b945f48a",
+        "type": "inject",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_Spare Relay 2 Blink 1 Sec",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "12:1",
+        "payloadType": "str",
+        "x": 310,
+        "y": 680,
+        "wires": [
+            [
+                "c91c8598c92e4737",
+                "982b68752d415296"
+            ]
+        ]
+    },
+    {
+        "id": "722c51fbb1279749",
+        "type": "inject",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_Spare Status",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "00",
+        "payloadType": "str",
+        "x": 350,
+        "y": 600,
+        "wires": [
+            [
+                "c91c8598c92e4737",
+                "982b68752d415296"
+            ]
+        ]
+    },
+    {
+        "id": "f1b8b2e8bb131e59",
+        "type": "debug",
+        "z": "909c32373110b97b",
+        "name": "Kiosk_Spare Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "fe92608b561ce1c3",
+        "type": "link in",
+        "z": "909c32373110b97b",
+        "name": "Kiosk Link",
+        "links": [
+            "eb3c5fe6b56dbb07"
+        ],
+        "x": 55,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9e38f0be304de04f",
+        "type": "tcp request",
+        "z": "88a31a254352bbd2",
+        "name": "Kiosk_1 Dev Board",
+        "server": "192.168.1.100",
+        "port": "6722",
+        "out": "time",
+        "ret": "string",
+        "splitc": "0",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 690,
+        "y": 180,
+        "wires": [
+            [
+                "e301e3a510f76019"
+            ]
+        ]
+    },
+    {
+        "id": "e301e3a510f76019",
+        "type": "debug",
+        "z": "88a31a254352bbd2",
+        "name": "Kiosk_1 Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 980,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "dcaf561c6cb93c33",
+        "type": "tcp request",
+        "z": "88a31a254352bbd2",
+        "name": "Kiosk_2 Dev Board",
+        "server": "192.168.1.100",
+        "port": "6722",
+        "out": "time",
+        "ret": "string",
+        "splitc": "0",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 690,
+        "y": 400,
+        "wires": [
+            [
+                "7a93c52dcef96a2e"
+            ]
+        ]
+    },
+    {
+        "id": "7a93c52dcef96a2e",
+        "type": "debug",
+        "z": "88a31a254352bbd2",
+        "name": "Kiosk_2 Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 980,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "ebd4d3552263da67",
+        "type": "tcp request",
+        "z": "88a31a254352bbd2",
+        "name": "Kiosk_Spare Dev Board",
+        "server": "192.168.1.100",
+        "port": "6722",
+        "out": "time",
+        "ret": "string",
+        "splitc": "0",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 710,
+        "y": 600,
+        "wires": [
+            [
+                "5baac6a2546d3665"
+            ]
+        ]
+    },
+    {
+        "id": "5baac6a2546d3665",
+        "type": "debug",
+        "z": "88a31a254352bbd2",
+        "name": "Kiosk_Spare Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1000,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "946e9fe7421650f0",
+        "type": "link in",
+        "z": "88a31a254352bbd2",
+        "name": "link in 1",
+        "links": [
+            "eb3c5fe6b56dbb07"
+        ],
+        "x": 175,
+        "y": 400,
+        "wires": [
+            [
+                "fc9cdba68dc56173",
+                "4648097a898ad2d8",
+                "615aa7376c1418bc"
+            ]
+        ]
+    },
+    {
+        "id": "fc9cdba68dc56173",
+        "type": "function",
+        "z": "88a31a254352bbd2",
+        "name": "Kiosk_1 Commands",
+        "func": "// Extract the payload\nlet payload = msg.payload;\n\n// Helper function to send delayed messages\nconst sendDelayed = (message, delay) => {\n    setTimeout(() => {\n        node.send({ payload: message });\n    }, delay);\n};\n\n// Logic for Kiosk_1 True\nif (payload === \"Kiosk_1 True\") {\n    // Send \"11:1\" immediately\n    node.send({ payload: \"11:1\" });\n    // Send \"11:1\" again after 1 second\n    sendDelayed(\"11:1\", 1000);\n}\n\n// Logic for Kiosk_1 False\nif (payload === \"Kiosk_1 False\") {\n    // Send \"12:1\" immediately\n    node.send({ payload: \"12:1\" });\n    // Send \"12:1\" again after 1 second\n    sendDelayed(\"12:1\", 1000);\n    // Send \"12:1\" again after 2 seconds\n    sendDelayed(\"12:1\", 2000);\n}\n\n// Return null to indicate the function's main flow is complete\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 220,
+        "wires": [
+            [
+                "9e38f0be304de04f",
+                "e301e3a510f76019"
+            ]
+        ]
+    },
+    {
+        "id": "4648097a898ad2d8",
+        "type": "function",
+        "z": "88a31a254352bbd2",
+        "name": "Kiosk_2 Commands",
+        "func": "// Extract the payload\nlet payload = msg.payload;\n\n// Helper function to send delayed messages\nconst sendDelayed = (message, delay) => {\n    setTimeout(() => {\n        node.send({ payload: message });\n    }, delay);\n};\n\n// Logic for Kiosk_1 True\nif (payload === \"Kiosk_2 True\") {\n    // Send \"11:1\" immediately\n    node.send({ payload: \"11:1\" });\n    // Send \"11:1\" again after 1 second\n    sendDelayed(\"11:1\", 1000);\n}\n\n// Logic for Kiosk_1 False\nif (payload === \"Kiosk_2 False\") {\n    // Send \"12:1\" immediately\n    node.send({ payload: \"12:1\" });\n    // Send \"12:1\" again after 1 second\n    sendDelayed(\"12:1\", 1000);\n    // Send \"12:1\" again after 2 seconds\n    sendDelayed(\"12:1\", 2000);\n}\n\n// Return null to indicate the function's main flow is complete\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 440,
+        "wires": [
+            [
+                "dcaf561c6cb93c33",
+                "7a93c52dcef96a2e"
+            ]
+        ]
+    },
+    {
+        "id": "615aa7376c1418bc",
+        "type": "function",
+        "z": "88a31a254352bbd2",
+        "name": "Kiosk_Spare Commands",
+        "func": "// Extract the payload\nlet payload = msg.payload;\n\n// Helper function to send delayed messages\nconst sendDelayed = (message, delay) => {\n    setTimeout(() => {\n        node.send({ payload: message });\n    }, delay);\n};\n\n// Logic for Kiosk_1 True\nif (payload === \"Kiosk_2 True\") {\n    // Send \"11:1\" immediately\n    node.send({ payload: \"11:1\" });\n    // Send \"11:1\" again after 1 second\n    sendDelayed(\"11:1\", 1000);\n}\n\n// Logic for Kiosk_1 False\nif (payload === \"Kiosk_2 False\") {\n    // Send \"12:1\" immediately\n    node.send({ payload: \"12:1\" });\n    // Send \"12:1\" again after 1 second\n    sendDelayed(\"12:1\", 1000);\n    // Send \"12:1\" again after 2 seconds\n    sendDelayed(\"12:1\", 2000);\n}\n\n// Return null to indicate the function's main flow is complete\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 640,
+        "wires": [
+            [
+                "ebd4d3552263da67",
+                "5baac6a2546d3665"
+            ]
+        ]
+    },
+    {
+        "id": "b86c8199e7884462",
+        "type": "modbus-read",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_ 1 Dev Board Status",
+        "topic": "",
+        "showStatusActivities": true,
+        "logIOActivities": false,
+        "showErrors": true,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "4",
+        "rate": "1",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "7dbd7bc318a4fc50",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 570,
+        "y": 40,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "170b0a0da214afeb",
+        "type": "debug",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_1 Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "058622b1229fde52",
+        "type": "modbus-write",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_1 Relay 1",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "1",
+        "server": "7dbd7bc318a4fc50",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 600,
+        "y": 100,
+        "wires": [
+            [
+                "170b0a0da214afeb"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "2a0ae8517c1c468e",
+        "type": "inject",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_1 Relay 1 Blink",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 220,
+        "y": 100,
+        "wires": [
+            [
+                "874c52db17669cbe"
+            ]
+        ]
+    },
+    {
+        "id": "3b62a34987886f20",
+        "type": "inject",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_1 Relay 2 Blink",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 220,
+        "y": 160,
+        "wires": [
+            [
+                "fe8983b322cdf3d2"
+            ]
+        ]
+    },
+    {
+        "id": "874c52db17669cbe",
+        "type": "function",
+        "z": "27355a4f25c0c00c",
+        "name": "Blink",
+        "func": "let commands = [\n    { payload: { address: 0, value: true } },  // Turn ON\n    { payload: { address: 0, value: false } }, // Turn OFF\n    { payload: { address: 0, value: true } },  // Turn ON again\n    { payload: { address: 0, value: false } }  // Turn OFF again\n];\n\nlet delays = [1000, 1000, 1000, 1000]; // 1 sec ON, 1 sec OFF, etc.\n\ncommands.forEach((command, index) => {\n    setTimeout(() => node.send(command), delays.slice(0, index + 1).reduce((a, b) => a + b, 0));\n});\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 100,
+        "wires": [
+            [
+                "058622b1229fde52"
+            ]
+        ]
+    },
+    {
+        "id": "fe8983b322cdf3d2",
+        "type": "function",
+        "z": "27355a4f25c0c00c",
+        "name": "Blink",
+        "func": "let commands = [\n    { payload: { address: 1, value: true } },  // Turn Relay 2 ON\n    { payload: { address: 1, value: false } }, // Turn Relay 2 OFF\n    { payload: { address: 1, value: true } },  // Turn Relay 2 ON\n    { payload: { address: 1, value: false } }, // Turn Relay 2 OFF\n    { payload: { address: 1, value: true } },  // Turn Relay 2 ON\n    { payload: { address: 1, value: false } }  // Turn Relay 2 OFF\n];\n\nlet delays = [1000, 1000, 1000, 1000, 1000, 1000]; // 1 sec ON, 1 sec OFF, etc.\n\ncommands.forEach((command, index) => {\n    setTimeout(() => node.send(command), delays.slice(0, index + 1).reduce((a, b) => a + b, 0));\n});\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "d6479e0ae6b3f708"
+            ]
+        ]
+    },
+    {
+        "id": "d6479e0ae6b3f708",
+        "type": "modbus-write",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_1 Relay 2",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "1",
+        "quantity": "1",
+        "server": "7dbd7bc318a4fc50",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 600,
+        "y": 160,
+        "wires": [
+            [
+                "170b0a0da214afeb"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "53403db558c856dc",
+        "type": "modbus-read",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_ 2 Dev Board Status",
+        "topic": "",
+        "showStatusActivities": true,
+        "logIOActivities": false,
+        "showErrors": true,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "4",
+        "rate": "1",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "7dbd7bc318a4fc50",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 570,
+        "y": 260,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "b5f142dd0c7dd5b0",
+        "type": "debug",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_2 Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "3a85e287b5393501",
+        "type": "modbus-write",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_2 Relay 1",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "1",
+        "server": "7dbd7bc318a4fc50",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 600,
+        "y": 320,
+        "wires": [
+            [
+                "b5f142dd0c7dd5b0"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "73d08ddd3f74e6b3",
+        "type": "inject",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_2 Relay 1 Blink",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 220,
+        "y": 320,
+        "wires": [
+            [
+                "aa9b859af265906a"
+            ]
+        ]
+    },
+    {
+        "id": "7f8563310ed27af6",
+        "type": "inject",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_2 Relay 2 Blink",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 220,
+        "y": 380,
+        "wires": [
+            [
+                "123b3a88336cbf10"
+            ]
+        ]
+    },
+    {
+        "id": "aa9b859af265906a",
+        "type": "function",
+        "z": "27355a4f25c0c00c",
+        "name": "Blink",
+        "func": "let commands = [\n    { payload: { address: 0, value: true } },  // Turn ON\n    { payload: { address: 0, value: false } }, // Turn OFF\n    { payload: { address: 0, value: true } },  // Turn ON again\n    { payload: { address: 0, value: false } }  // Turn OFF again\n];\n\nlet delays = [1000, 1000, 1000, 1000]; // 1 sec ON, 1 sec OFF, etc.\n\ncommands.forEach((command, index) => {\n    setTimeout(() => node.send(command), delays.slice(0, index + 1).reduce((a, b) => a + b, 0));\n});\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 320,
+        "wires": [
+            [
+                "3a85e287b5393501"
+            ]
+        ]
+    },
+    {
+        "id": "123b3a88336cbf10",
+        "type": "function",
+        "z": "27355a4f25c0c00c",
+        "name": "Blink",
+        "func": "let commands = [\n    { payload: { address: 1, value: true } },  // Turn Relay 2 ON\n    { payload: { address: 1, value: false } }, // Turn Relay 2 OFF\n    { payload: { address: 1, value: true } },  // Turn Relay 2 ON\n    { payload: { address: 1, value: false } }, // Turn Relay 2 OFF\n    { payload: { address: 1, value: true } },  // Turn Relay 2 ON\n    { payload: { address: 1, value: false } }  // Turn Relay 2 OFF\n];\n\nlet delays = [1000, 1000, 1000, 1000, 1000, 1000]; // 1 sec ON, 1 sec OFF, etc.\n\ncommands.forEach((command, index) => {\n    setTimeout(() => node.send(command), delays.slice(0, index + 1).reduce((a, b) => a + b, 0));\n});\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 380,
+        "wires": [
+            [
+                "9a89ff8f767fb547"
+            ]
+        ]
+    },
+    {
+        "id": "9a89ff8f767fb547",
+        "type": "modbus-write",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_2 Relay 2",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "1",
+        "quantity": "1",
+        "server": "7dbd7bc318a4fc50",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 600,
+        "y": 380,
+        "wires": [
+            [
+                "b5f142dd0c7dd5b0"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "282b257a4644c012",
+        "type": "modbus-read",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_ Spare Dev Board Status",
+        "topic": "",
+        "showStatusActivities": true,
+        "logIOActivities": false,
+        "showErrors": true,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "4",
+        "rate": "1",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "7dbd7bc318a4fc50",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 550,
+        "y": 480,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "794228d6ee5549c0",
+        "type": "debug",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_2 Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "52b8bd3210e9d351",
+        "type": "modbus-write",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_Spare Relay 1",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "1",
+        "server": "7dbd7bc318a4fc50",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 580,
+        "y": 540,
+        "wires": [
+            [
+                "794228d6ee5549c0"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e747809072ae71d7",
+        "type": "inject",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_Spare Relay 1 Blink",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 210,
+        "y": 540,
+        "wires": [
+            [
+                "33a2f28fe52f068c"
+            ]
+        ]
+    },
+    {
+        "id": "c7f88003a6b66c7d",
+        "type": "inject",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_Spare Relay 2 Blink",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 210,
+        "y": 600,
+        "wires": [
+            [
+                "a6c9ebf801d41983"
+            ]
+        ]
+    },
+    {
+        "id": "33a2f28fe52f068c",
+        "type": "function",
+        "z": "27355a4f25c0c00c",
+        "name": "Blink",
+        "func": "let commands = [\n    { payload: { address: 0, value: true } },  // Turn ON\n    { payload: { address: 0, value: false } }, // Turn OFF\n    { payload: { address: 0, value: true } },  // Turn ON again\n    { payload: { address: 0, value: false } }  // Turn OFF again\n];\n\nlet delays = [1000, 1000, 1000, 1000]; // 1 sec ON, 1 sec OFF, etc.\n\ncommands.forEach((command, index) => {\n    setTimeout(() => node.send(command), delays.slice(0, index + 1).reduce((a, b) => a + b, 0));\n});\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 540,
+        "wires": [
+            [
+                "52b8bd3210e9d351"
+            ]
+        ]
+    },
+    {
+        "id": "a6c9ebf801d41983",
+        "type": "function",
+        "z": "27355a4f25c0c00c",
+        "name": "Blink",
+        "func": "let commands = [\n    { payload: { address: 1, value: true } },  // Turn Relay 2 ON\n    { payload: { address: 1, value: false } }, // Turn Relay 2 OFF\n    { payload: { address: 1, value: true } },  // Turn Relay 2 ON\n    { payload: { address: 1, value: false } }, // Turn Relay 2 OFF\n    { payload: { address: 1, value: true } },  // Turn Relay 2 ON\n    { payload: { address: 1, value: false } }  // Turn Relay 2 OFF\n];\n\nlet delays = [1000, 1000, 1000, 1000, 1000, 1000]; // 1 sec ON, 1 sec OFF, etc.\n\ncommands.forEach((command, index) => {\n    setTimeout(() => node.send(command), delays.slice(0, index + 1).reduce((a, b) => a + b, 0));\n});\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 600,
+        "wires": [
+            [
+                "0218ba4e23108893"
+            ]
+        ]
+    },
+    {
+        "id": "0218ba4e23108893",
+        "type": "modbus-write",
+        "z": "27355a4f25c0c00c",
+        "name": "Kiosk_Spare Relay 2",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "1",
+        "quantity": "1",
+        "server": "7dbd7bc318a4fc50",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 580,
+        "y": 600,
+        "wires": [
+            [
+                "794228d6ee5549c0"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "05ac6cd0a454a0f3",
+        "type": "modbus-read",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_ 1 Dev Board Status",
+        "topic": "",
+        "showStatusActivities": true,
+        "logIOActivities": false,
+        "showErrors": true,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "4",
+        "rate": "1",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "7dbd7bc318a4fc50",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 590,
+        "y": 120,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "9fc2d2ecfd79bc57",
+        "type": "debug",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_1 Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "c41f93730e755733",
+        "type": "modbus-write",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_1 Relay 1",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "1",
+        "server": "7dbd7bc318a4fc50",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 620,
+        "y": 180,
+        "wires": [
+            [
+                "9fc2d2ecfd79bc57"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "b14770c39d1ac3cf",
+        "type": "function",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_1 True Command",
+        "func": "// Extract the payload\nlet payload = msg.payload;\n\n// Initialize command sequence and delays\nlet commands = [];\nlet delays = [];\n\n// Define sequences based on the input\nif (payload === \"Kiosk_1 True\") {\n    // True sequence for address 0: ON, OFF, ON, OFF\n    commands = [\n        { payload: { address: 0, value: true } },\n        { payload: { address: 0, value: false } },\n        { payload: { address: 0, value: true } },\n        { payload: { address: 0, value: false } }\n    ];\n    delays = [0, 1000, 2000, 3000]; // Delays: immediate, 1s, 2s, 3s\n} else {\n    // If payload doesn't match, log a message and stop processing\n    node.error(\"Invalid input payload: \" + payload);\n    return null;\n}\n\n// Send commands with delays\ncommands.forEach((command, index) => {\n    setTimeout(() => {\n        node.send(command); // Send the command\n        node.warn(\"Sent command: \" + JSON.stringify(command)); // Log for debugging\n    }, delays[index]);\n});\n\n// Return null since we're handling messages asynchronously\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 180,
+        "wires": [
+            [
+                "c41f93730e755733"
+            ]
+        ]
+    },
+    {
+        "id": "9357565c61d777d6",
+        "type": "modbus-write",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_1 Relay 2",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "1",
+        "quantity": "1",
+        "server": "7dbd7bc318a4fc50",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 620,
+        "y": 240,
+        "wires": [
+            [
+                "9fc2d2ecfd79bc57"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "cbbed32006d4c291",
+        "type": "modbus-read",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_ 2 Dev Board Status",
+        "topic": "",
+        "showStatusActivities": true,
+        "logIOActivities": false,
+        "showErrors": true,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "4",
+        "rate": "1",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "7dbd7bc318a4fc50",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 590,
+        "y": 340,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "6d03e1c5d8f58038",
+        "type": "debug",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_2 Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "3a6c293b7f329e26",
+        "type": "modbus-write",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_2 Relay 1",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "1",
+        "server": "7dbd7bc318a4fc50",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 620,
+        "y": 400,
+        "wires": [
+            [
+                "6d03e1c5d8f58038"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "7ba25fddc78322d8",
+        "type": "modbus-write",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_2 Relay 2",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "1",
+        "quantity": "1",
+        "server": "7dbd7bc318a4fc50",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 620,
+        "y": 460,
+        "wires": [
+            [
+                "6d03e1c5d8f58038"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "85add3cf1eb71763",
+        "type": "modbus-read",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_ Spare Dev Board Status",
+        "topic": "",
+        "showStatusActivities": true,
+        "logIOActivities": false,
+        "showErrors": true,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "4",
+        "rate": "1",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "7dbd7bc318a4fc50",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 610,
+        "y": 560,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "278ae84d9f3e36d9",
+        "type": "debug",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_2 Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "af397a56824e82ec",
+        "type": "modbus-write",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_Spare Relay 1",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "1",
+        "server": "7dbd7bc318a4fc50",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 640,
+        "y": 620,
+        "wires": [
+            [
+                "278ae84d9f3e36d9"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "6a2317bc6470b369",
+        "type": "modbus-write",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_Spare Relay 2",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "1",
+        "quantity": "1",
+        "server": "7dbd7bc318a4fc50",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 640,
+        "y": 680,
+        "wires": [
+            [
+                "278ae84d9f3e36d9"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d64a54cc86c311fd",
+        "type": "link in",
+        "z": "7915794ca88cb27a",
+        "name": "link in 2",
+        "links": [
+            "eb3c5fe6b56dbb07"
+        ],
+        "x": 145,
+        "y": 400,
+        "wires": [
+            [
+                "b14770c39d1ac3cf",
+                "80cce9af12212075",
+                "4d8dd4e5efb84bb4",
+                "ee6c9206d100677c",
+                "9a60bd101ac44121",
+                "c7c2716f9971632b"
+            ]
+        ]
+    },
+    {
+        "id": "80cce9af12212075",
+        "type": "function",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_1 False Command",
+        "func": "// Extract the payload\nlet payload = msg.payload;\n\n// Initialize command sequence and delays\nlet commands = [];\nlet delays = [];\n\n// Define sequences based on the input\nif (payload === \"Kiosk_1 False\") {\n    // False sequence for address 1: ON, OFF, ON, OFF, ON, OFF\n    commands = [\n        { payload: { address: 1, value: true } },\n        { payload: { address: 1, value: false } },\n        { payload: { address: 1, value: true } },\n        { payload: { address: 1, value: false } },\n        { payload: { address: 1, value: true } },\n        { payload: { address: 1, value: false } }\n    ];\n    delays = [0, 1000, 2000, 3000, 4000, 5000]; // Delays: immediate, 1s, 2s, 3s, 4s, 5s\n} else {\n    // If payload doesn't match, log a message and stop processing\n    node.error(\"Invalid input payload: \" + payload);\n    return null;\n}\n\n// Send commands with delays\ncommands.forEach((command, index) => {\n    setTimeout(() => {\n        node.send(command); // Send the command\n        node.warn(\"Sent command: \" + JSON.stringify(command)); // Log for debugging\n    }, delays[index]);\n});\n\n// Return null since we're handling messages asynchronously\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 240,
+        "wires": [
+            [
+                "9357565c61d777d6"
+            ]
+        ]
+    },
+    {
+        "id": "4d8dd4e5efb84bb4",
+        "type": "function",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_2 True Command",
+        "func": "// Extract the payload\nlet payload = msg.payload;\n\n// Initialize command sequence and delays\nlet commands = [];\nlet delays = [];\n\n// Define sequences based on the input\nif (payload === \"Kiosk_2 True\") {\n    // True sequence for address 0: ON, OFF, ON, OFF\n    commands = [\n        { payload: { address: 0, value: true } },\n        { payload: { address: 0, value: false } },\n        { payload: { address: 0, value: true } },\n        { payload: { address: 0, value: false } }\n    ];\n    delays = [0, 1000, 2000, 3000]; // Delays: immediate, 1s, 2s, 3s\n} else {\n    // If payload doesn't match, log a message and stop processing\n    node.error(\"Invalid input payload: \" + payload);\n    return null;\n}\n\n// Send commands with delays\ncommands.forEach((command, index) => {\n    setTimeout(() => {\n        node.send(command); // Send the command\n        node.warn(\"Sent command: \" + JSON.stringify(command)); // Log for debugging\n    }, delays[index]);\n});\n\n// Return null since we're handling messages asynchronously\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 400,
+        "wires": [
+            [
+                "3a6c293b7f329e26"
+            ]
+        ]
+    },
+    {
+        "id": "ee6c9206d100677c",
+        "type": "function",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_2 False Command",
+        "func": "// Extract the payload\nlet payload = msg.payload;\n\n// Initialize command sequence and delays\nlet commands = [];\nlet delays = [];\n\n// Define sequences based on the input\nif (payload === \"Kiosk_2 False\") {\n    // False sequence for address 1: ON, OFF, ON, OFF, ON, OFF\n    commands = [\n        { payload: { address: 1, value: true } },\n        { payload: { address: 1, value: false } },\n        { payload: { address: 1, value: true } },\n        { payload: { address: 1, value: false } },\n        { payload: { address: 1, value: true } },\n        { payload: { address: 1, value: false } }\n    ];\n    delays = [0, 1000, 2000, 3000, 4000, 5000]; // Delays: immediate, 1s, 2s, 3s, 4s, 5s\n} else {\n    // If payload doesn't match, log a message and stop processing\n    node.error(\"Invalid input payload: \" + payload);\n    return null;\n}\n\n// Send commands with delays\ncommands.forEach((command, index) => {\n    setTimeout(() => {\n        node.send(command); // Send the command\n        node.warn(\"Sent command: \" + JSON.stringify(command)); // Log for debugging\n    }, delays[index]);\n});\n\n// Return null since we're handling messages asynchronously\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 460,
+        "wires": [
+            [
+                "7ba25fddc78322d8"
+            ]
+        ]
+    },
+    {
+        "id": "9a60bd101ac44121",
+        "type": "function",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_Spare True Command",
+        "func": "// Extract the payload\nlet payload = msg.payload;\n\n// Initialize command sequence and delays\nlet commands = [];\nlet delays = [];\n\n// Define sequences based on the input\nif (payload === \"Kiosk_2 True\") {\n    // True sequence for address 0: ON, OFF, ON, OFF\n    commands = [\n        { payload: { address: 0, value: true } },\n        { payload: { address: 0, value: false } },\n        { payload: { address: 0, value: true } },\n        { payload: { address: 0, value: false } }\n    ];\n    delays = [0, 1000, 2000, 3000]; // Delays: immediate, 1s, 2s, 3s\n} else {\n    // If payload doesn't match, log a message and stop processing\n    node.error(\"Invalid input payload: \" + payload);\n    return null;\n}\n\n// Send commands with delays\ncommands.forEach((command, index) => {\n    setTimeout(() => {\n        node.send(command); // Send the command\n        node.warn(\"Sent command: \" + JSON.stringify(command)); // Log for debugging\n    }, delays[index]);\n});\n\n// Return null since we're handling messages asynchronously\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 620,
+        "wires": [
+            [
+                "af397a56824e82ec"
+            ]
+        ]
+    },
+    {
+        "id": "c7c2716f9971632b",
+        "type": "function",
+        "z": "7915794ca88cb27a",
+        "name": "Kiosk_Spare False Command",
+        "func": "// Extract the payload\nlet payload = msg.payload;\n\n// Initialize command sequence and delays\nlet commands = [];\nlet delays = [];\n\n// Define sequences based on the input\nif (payload === \"Kiosk_2 False\") {\n    // False sequence for address 1: ON, OFF, ON, OFF, ON, OFF\n    commands = [\n        { payload: { address: 1, value: true } },\n        { payload: { address: 1, value: false } },\n        { payload: { address: 1, value: true } },\n        { payload: { address: 1, value: false } },\n        { payload: { address: 1, value: true } },\n        { payload: { address: 1, value: false } }\n    ];\n    delays = [0, 1000, 2000, 3000, 4000, 5000]; // Delays: immediate, 1s, 2s, 3s, 4s, 5s\n} else {\n    // If payload doesn't match, log a message and stop processing\n    node.error(\"Invalid input payload: \" + payload);\n    return null;\n}\n\n// Send commands with delays\ncommands.forEach((command, index) => {\n    setTimeout(() => {\n        node.send(command); // Send the command\n        node.warn(\"Sent command: \" + JSON.stringify(command)); // Log for debugging\n    }, delays[index]);\n});\n\n// Return null since we're handling messages asynchronously\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 680,
+        "wires": [
+            [
+                "6a2317bc6470b369"
+            ]
+        ]
+    }
+]
